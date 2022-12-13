@@ -8,7 +8,6 @@ import (
 	"unicode/utf8"
 
 	"github.com/gocolly/colly"
-	"github.com/joho/godotenv"
 	"github.com/slack-go/slack"
 )
 
@@ -75,10 +74,6 @@ func sendMessage(message string, color string) error {
 }
 
 func main() {
-
-	// Load Env variables from .dot file
-	godotenv.Load(".env")
-
 	err := sendMessage("Starting the roly poly scraper", "#36a64f")
 
 	Scrape()
