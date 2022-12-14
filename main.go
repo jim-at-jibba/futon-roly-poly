@@ -34,7 +34,7 @@ func Scrape() {
 
 		fmt.Println(marks)
 		if marks != float64(current) {
-			_ = sendMessage("The Roly poly has changed price", "#ff0")
+			_ = sendSlackMessage("The Roly poly has changed price", "#ff0")
 
 		}
 
@@ -47,7 +47,7 @@ func Scrape() {
 	c.Visit("https://www.futoncompany.co.uk/shop-by-product/new/roly-poly-pebble-grey-coast-weave.html")
 }
 
-func sendMessage(message string, color string) error {
+func sendSlackMessage(message string, color string) error {
 	token := os.Getenv("SLACK_AUTH_TOKEN")
 	channelID := os.Getenv("SLACK_CHANNEL_ID")
 
@@ -74,7 +74,7 @@ func sendMessage(message string, color string) error {
 }
 
 func main() {
-	err := sendMessage("Starting the roly poly scraper", "#36a64f")
+	err := sendSlackMessage("Starting the roly poly scraper", "#36a64f")
 
 	Scrape()
 
