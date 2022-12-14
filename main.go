@@ -7,6 +7,7 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/go-co-op/gocron"
 	"github.com/gocolly/colly"
 	"github.com/slack-go/slack"
 	twilio "github.com/twilio/twilio-go"
@@ -14,6 +15,11 @@ import (
 )
 
 func Scrape() {
+	err := sendSlackMessage("Starting the roly poly scraper", "#36a64f")
+
+	if err != nil {
+		panic(err)
+	}
 
 	c := colly.NewCollector()
 	c.SetRequestTimeout(120 * time.Second)
@@ -90,12 +96,17 @@ func SendMsg(msg string, to string) {
 	}
 }
 
+func runCronJob() {
+	s := gocron.NewScheduler(time.UTC)
+
+	s.Every(1).Day().At("10:30").Do(func() {
+		Scrape()
+	})
+
+	s.StartBlocking()
+}
+
 func main() {
-	err := sendSlackMessage("Starting the roly poly scraper", "#36a64f")
 
-	Scrape()
-
-	if err != nil {
-		panic(err)
-	}
+	runCronJob()
 }
