@@ -9,6 +9,8 @@ import (
 
 	"github.com/gocolly/colly"
 	"github.com/slack-go/slack"
+	twilio "github.com/twilio/twilio-go"
+	openapi "github.com/twilio/twilio-go/rest/api/v2010"
 )
 
 func Scrape() {
@@ -24,7 +26,7 @@ func Scrape() {
 	})
 
 	c.OnHTML(".ty-product-block__price-actual", func(e *colly.HTMLElement) {
-		current := 100
+		current := 95
 		fullPrice := e.ChildText(".ty-price-num")
 		_, i := utf8.DecodeRuneInString(fullPrice)
 		marks, err := strconv.ParseFloat(fullPrice[i:], 64)
@@ -34,8 +36,7 @@ func Scrape() {
 
 		fmt.Println(marks)
 		if marks != float64(current) {
-			_ = sendSlackMessage("The Roly poly has changed price", "#ff0")
-
+			SendMsg("Roly Poly has changed price", os.Getenv("ELLA_PHONE_NUMBER"))
 		}
 
 	})
@@ -71,6 +72,22 @@ func sendSlackMessage(message string, color string) error {
 	fmt.Printf("Message sent at %s", timestamp)
 	return nil
 
+}
+
+func SendMsg(msg string, to string) {
+	client := twilio.NewRestClient()
+
+	params := &openapi.CreateMessageParams{}
+	params.SetTo(to)
+	params.SetFrom(os.Getenv("TWILIO_PHONE_NUMBER"))
+	params.SetBody(msg)
+
+	_, err := client.Api.CreateMessage(params)
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println("SMS sent successfully!")
+	}
 }
 
 func main() {
