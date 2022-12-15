@@ -32,7 +32,7 @@ func Scrape() {
 	})
 
 	c.OnHTML(".ty-product-block__price-actual", func(e *colly.HTMLElement) {
-		current := 95
+		wanted := 70
 		fullPrice := e.ChildText(".ty-price-num")
 		_, i := utf8.DecodeRuneInString(fullPrice)
 		marks, err := strconv.ParseFloat(fullPrice[i:], 64)
@@ -41,7 +41,7 @@ func Scrape() {
 		}
 
 		fmt.Println(marks)
-		if marks != float64(current) {
+		if marks <= float64(wanted) {
 			SendMsg(fmt.Sprintf("Roly Poly has changed price £%f", marks), os.Getenv("ELLA_PHONE_NUMBER"))
 			sendSlackMessage(fmt.Sprintf("Roly Poly has changed price £%f", marks), "#36a64f")
 		}
