@@ -42,7 +42,8 @@ func Scrape() {
 
 		fmt.Println(marks)
 		if marks != float64(current) {
-			SendMsg("Roly Poly has changed price", os.Getenv("ELLA_PHONE_NUMBER"))
+			SendMsg(fmt.Sprintf("Roly Poly has changed price %f", marks), os.Getenv("ELLA_PHONE_NUMBER"))
+			sendSlackMessage(fmt.Sprintf("Roly Poly has changed price %f", marks), "#36a64f")
 		}
 
 	})
