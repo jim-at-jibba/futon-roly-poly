@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to futon-roly-poly :bed</h1>
+<h1 align="center">Welcome to futon-roly-poly 🛏️</h1>
 
 > Scraper to notify me when the Roly Poly mattress has gone on sale.
 
